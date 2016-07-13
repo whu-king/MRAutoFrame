@@ -7,7 +7,7 @@ import java.text.DecimalFormat;
  * @author imlilu
  *
  */
- class MatrixTest {
+ class MatrixDet {
 
     public static void main(String[] args) {
 //		double[][] test = {{2,1,-1},{4,-1,1},{201,102,-99}}; 			½á¹ûÎª-18

@@ -1,5 +1,7 @@
 package app;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2016/5/17.
  */
@@ -8,18 +10,11 @@ public class MRDemo {
     public String ProgramName;
     public String inputRelation;
     public String outputRelation;
-    public int inputNumber;
-    public int outputNumber;
-    public int MRnumber;
+    public List<Parameter> inputParameterList;
+    public List<Parameter> outputParameterList;
+    public int MRNumber;
 
 
-    public int getMRnumber() {
-        return MRnumber;
-    }
-
-    public void setMRnumber(int MRnumber) {
-        this.MRnumber = MRnumber;
-    }
 
     public String getProgramName() {
         return ProgramName;
@@ -45,20 +40,28 @@ public class MRDemo {
         this.outputRelation = outputRelation;
     }
 
-    public int getInputNumber() {
-        return inputNumber;
+    public List<Parameter> getInputParameterList() {
+        return inputParameterList;
     }
 
-    public void setInputNumber(int inputNumber) {
-        this.inputNumber = inputNumber;
+    public void setInputParameterList(List<Parameter> inputParameterList) {
+        this.inputParameterList = inputParameterList;
     }
 
-    public int getOutputNumber() {
-        return outputNumber;
+    public List<Parameter> getOutputParameterList() {
+        return outputParameterList;
     }
 
-    public void setOutputNumber(int outputNumber) {
-        this.outputNumber = outputNumber;
+    public void setOutputParameterList(List<Parameter> outputParameterList) {
+        this.outputParameterList = outputParameterList;
+    }
+
+    public int getMRNumber() {
+        return MRNumber;
+    }
+
+    public void setMRNumber(int MRNumber) {
+        this.MRNumber = MRNumber;
     }
 
 }

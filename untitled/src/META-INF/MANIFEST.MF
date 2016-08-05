@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Class-Path: lib/curvesapi-1.03.jar lib/junit-4.7.jar lib/org.apache.lo
+ g4j_1.2.15.v201005080500.jar lib/poi-3.14-20160307.jar lib/poi-exampl
+ es-3.14-20160307.jar lib/poi-excelant-3.14-20160307.jar lib/poi-ooxml
+ -3.14-20160307.jar lib/poi-ooxml-schemas-3.14-20160307.jar lib/poi-sc
+ ratchpad-3.14-20160307.jar lib/xmlbeans-2.6.0.jar
+Main-Class: app.Main
+

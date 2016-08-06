@@ -15,7 +15,7 @@ public class Parameter {
     private String name = "";
 
     public enum DataType {
-        FLOAT("float",1),DOUBLE("double",2),LONG("long",3),INT("int",4),ARRAY("array",5),NUMBER("number",6);
+        FLOAT("float",1),DOUBLE("double",2),LONG("long",3),INT("int",4),ARRAY("array",5),String("string",6);
         // 成员变量
         private String name;
         private int index;

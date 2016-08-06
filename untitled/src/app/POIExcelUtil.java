@@ -1,6 +1,7 @@
 package app;
 
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -66,26 +67,25 @@ public class POIExcelUtil {
         XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(filePath));
         XSSFSheet inputsheet = workbook.createSheet("InputSheet");
         XSSFRow row = inputsheet.createRow(1);
-        int SourceEnd = createParameterTitleCell(inputsheet,0,row,mr.getInputParameterList());
+        int SourceEnd = createParameterTitleCell(inputsheet, 0, row, mr.getInputParameterList());
         int FollowEnd = createParameterTitleCell(inputsheet,SourceEnd,row,mr.getInputParameterList());
-        createTCTitle(SourceEnd,FollowEnd - 1,inputsheet);
+        createTCTitle(SourceEnd, FollowEnd - 1, inputsheet);
 
         /**************Copy input data into new sheet*****************/
-//        XSSFSheet dataSheet = workbook.getSheetAt(1);
-//        long rowNum = dataSheet.getLastRowNum() + 1;
-//        for(int i = 0, dataCount = 0;i < rowNum; i++){
-//            XSSFRow dataRow = dataSheet.getRow(i);
-//            if(dataRow == null) continue;
-//            String cellContent = String.valueOf(dataRow.getCell(0).getNumericCellValue());
-//            if(cellContent != null && !cellContent.equalsIgnoreCase("")){
-//                XSSFRow inputRow = inputsheet.createRow(2+dataCount);
-//                for(int paramCount = 0; paramCount < mr.getInputNumber(); paramCount ++){
-//                    inputRow.createCell(paramCount).setCellValue(dataRow.getCell(paramCount).getNumericCellValue());
-//                }
-//                dataCount++;
-//            }
-//        }
-
+        XSSFSheet dataSheet = workbook.getSheetAt(1);
+        long rowNum = dataSheet.getLastRowNum() + 1;
+        for(int i = 0, dataCount = 0;i < rowNum; i++){
+            XSSFRow dataRow = dataSheet.getRow(i);
+            if(dataRow == null) continue;
+            String cellContent = dataRow.getCell(0).getRawValue();
+            if(cellContent != null && !cellContent.equalsIgnoreCase("")){
+                XSSFRow inputRow = inputsheet.createRow(2+dataCount);
+                for(int paramCount = 0; paramCount < mr.getInputParameterList().size(); paramCount ++){
+                    inputRow.createCell(paramCount).setCellValue(getStringValueFromCell(dataRow.getCell(paramCount)));
+                }
+                dataCount++;
+            }
+        }
 
         /**************Create Sheet for Output*****************/
         XSSFSheet outputsheet = workbook.createSheet("OutputSheet");
@@ -93,6 +93,8 @@ public class POIExcelUtil {
         SourceEnd = createParameterTitleCell(outputsheet, 0, row2, mr.getOutputParameterList());
         FollowEnd = createParameterTitleCell(outputsheet, SourceEnd, row2, mr.getOutputParameterList());
         createTCTitle(SourceEnd,FollowEnd - 1,outputsheet);
+        row2 = outputsheet.getRow(0);
+        row2.createCell(FollowEnd).setCellValue("Check Result");
 
         workbook.removeSheetAt(1);
         workbook.write(out);
@@ -102,222 +104,154 @@ public class POIExcelUtil {
         System.out.println("create finished");
         return targetFile;
     }
-//
-//    public void generateFollowInputByMR(String excelPath) throws Exception {
-//        System.out.println("generate Follow Input by MR...");
-//        runVbs("generateFollowInput", excelPath);
-//        System.out.println("generate Finished");
-//    }
-//
-//    public void generateFollowOutputByMR(String excelPath) throws Exception {
-//        System.out.println("generate Follow Output by MR...");
-//        runVbs("generateFollowOutput", excelPath);
-//        System.out.println("generate Finished");
-//    }
-//
-//    public String generateSourceOutputByProgram(ProgramPackage programfile,String excelPath,MRDemo mr) throws IOException, InterruptedException {
-//
-//        System.out.println("generate Source Output By Program...");
-//        /**************Generate Name for new Excel*****************/
-//        String timeStamp = getExcelName();
-//        File dir = new File(excelPath).getParentFile();
-//        String targetFile = "F:/" + mr.getProgramName() + "_" + mr.getMRnumber() + "_" + timeStamp + ".xlsm";
-//        File filewrite=new File(targetFile);
-//        filewrite.createNewFile();
-//        OutputStream out = new FileOutputStream(filewrite);
-//
-//        XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(excelPath));
-//        XSSFSheet inputSheet = workbook.getSheet("InputSheet");
-//        XSSFSheet outputSheet = workbook.getSheet("OutputSheet");
-//        long  rowNum = inputSheet.getPhysicalNumberOfRows();
-//        double[] sourceOutput ;
-//        double[] sourceInput = new double[mr.getInputNumber()];
-//
-//        for(int i = 2; i < rowNum; i++){
-//            XSSFRow inputRow = inputSheet.getRow(i);
-//            String cellContent = String.valueOf(inputRow.getCell(0).getNumericCellValue());
-//            if(cellContent != null && !cellContent.equalsIgnoreCase("")){
-//                for(int parameterCount = 0 ; parameterCount < mr.getInputNumber(); parameterCount++ ){
-//                    sourceInput[parameterCount] = inputRow.getCell(parameterCount).getNumericCellValue();
-//                }
-//                sourceOutput = callExternalProgram(programfile,sourceInput,mr.getOutputNumber());
-//                XSSFRow outputRow = outputSheet.createRow(i);
-//                for(int parameterCount = 0; parameterCount < mr.getOutputNumber(); parameterCount++){
-//                   outputRow.createCell(parameterCount).setCellValue(sourceOutput[parameterCount]);
-//                }
-//            }
-//        }
-//
-//        workbook.write(out);
-//        out.close();
-////        System.out.println("xlsm created successfully..");
-////        System.out.println("excel Path : " + targetFile);
-//        workbook.close();
-//        new File(excelPath).delete();
-//        System.out.println("generate Finished");
-//        return targetFile;
-//    }
-//
-//    public String generateFollowOutputByProgram(ProgramPackage programFile,String excelPath, MRDemo mr) throws Exception {
-//
-//        /**************Generate Name for new Excel*****************/
-//        String timeStamp = getExcelName();
-//        File dir = new File(excelPath).getParentFile();
-//        String targetFile = "F:/" + mr.getProgramName() + "_" + mr.getMRnumber() + "_" + timeStamp + ".xlsm";
-//        File filewrite=new File(targetFile);
-//        filewrite.createNewFile();
-//        OutputStream out = new FileOutputStream(filewrite);
-//
-//        /**************Get input Parameter and expectedOutput for Junit Run*****************/
-//        System.out.println("prepare Data for Junit");
-//        XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(excelPath));
-//        XSSFSheet inputSheet = workbook.getSheet("InputSheet");
-//        XSSFSheet outputSheet = workbook.getSheet("OutputSheet");
-//        long  rowNum = inputSheet.getPhysicalNumberOfRows();
-//        List<DataPackage> inputRows = new ArrayList<DataPackage>(),expectedOutput = new ArrayList<DataPackage>();
-//        double[] inputRowSourceAndFollow = new double[mr.getInputNumber()*2],expecteRow = new double[mr.getOutputNumber()];
-//        for(int i = 2; i < rowNum; i++){
-//            XSSFRow inputRow = inputSheet.getRow(i);
-//            String cellContent = String.valueOf(inputRow.getCell(0).getNumericCellValue());
-//            if(cellContent != null && !cellContent.equalsIgnoreCase("")){
-//                for(int parameterCount = 0 ; parameterCount < mr.getInputNumber()*2; parameterCount++ ){
-//                    inputRowSourceAndFollow[parameterCount] = inputRow.getCell(parameterCount).getNumericCellValue();
-//                }
-//                inputRows.add(new DataPackage(inputRowSourceAndFollow,i));
-//            }
-//            inputRowSourceAndFollow = new double[mr.getInputNumber()*2];
-//        }
-//        rowNum = outputSheet.getPhysicalNumberOfRows();
-//        for(int i = 2; i < rowNum; i++){
-//            XSSFRow outputRow = outputSheet.getRow(i);
-//            String cellContent = String.valueOf(outputRow.getCell(0).getNumericCellValue());
-//            if(cellContent != null && !cellContent.equalsIgnoreCase("")){
-//                for(int parameterCount = 0 ; parameterCount < mr.getOutputNumber(); parameterCount++ ){
-//                    expecteRow[parameterCount] = outputRow.getCell(parameterCount*3 + 1).getNumericCellValue();
-//                }
-//                expectedOutput.add(new DataPackage(expecteRow, i));
-//            }
-//            expecteRow = new double[mr.getOutputNumber()];
-//        }
-//        System.out.println("prepare Finished");
-//        JUnitRunner jUnitRunner = new JUnitRunner();
-//        jUnitRunner.setUp((DataPackage[])inputRows.toArray(new DataPackage[inputRows.size()]),mr,
-//                programFile,(DataPackage[])expectedOutput.toArray(new DataPackage[expectedOutput.size()]));
-//        jUnitRunner.run();
-//        List<DataPackage> followTcOutput = jUnitRunner.getFollowOutput();
-//        for(DataPackage data : followTcOutput){
-//            XSSFRow outputRow = outputSheet.getRow((int) data.getExcelRowNum());
-//            double[] output = data.getData();
-//            for(int paramaterCount = 0; paramaterCount < mr.getOutputNumber(); paramaterCount ++){
-//                outputRow.createCell(mr.getOutputNumber()*2 + paramaterCount).setCellValue(output[paramaterCount]);
-//            }
-//        }
-//
-//        workbook.write(out);
-//        out.close();
-//        System.out.println("Final Excel Path : " + targetFile);
-//        workbook.close();
-//        new File(excelPath).delete();
-//        return targetFile;
-//    }
-//
-//
-//    /**
-//     * compile files in the same Directory and run main class to get result
-//     * @param programPackage
-//     * @param params
-//     * @param outputNumber
-//     * @return
-//     * @throws IOException
-//     * @throws InterruptedException
-//     */
-//    public double[] callExternalProgram(ProgramPackage programPackage, final double[] params, int outputNumber) throws IOException, InterruptedException {
-//
-//        String mainFileName = programPackage.getProgramMainFileName();
-//        String sourceFileDir = programPackage.getProgramMainFileDir();
-//        String mainFilePackageName = programPackage.getProgramMainFilePackageName();
-//
-//        //temporary directory to store .class file
-//        File dir = new File(System.getProperty("user.dir") + "/temp");
-//        if (!dir.exists()) {dir.mkdir();}
-//        //compile source Files in one directory
-//        String compileCommond = "javac -d " + dir.getAbsolutePath() + " " + sourceFileDir + "*.java";
-//        final Process compilePro = Runtime.getRuntime().exec(compileCommond);
+
+
+    public void generateFollowInputByMR(String excelPath) throws Exception {
+        System.out.println("generate Follow Input by MR...");
+        runVbs("generateFollowInput", excelPath);
+        System.out.println("generate Finished");
+    }
+
+    public String generateOutputByProgram(ProgramPackage programFile,String excelPath, MRDemo mr) throws Exception {
+
+        /**************Generate Name for new Excel*****************/
+        File dir = new File(excelPath).getParentFile();
+        String targetFile = getExcelName(mr);
+        File filewrite=new File(targetFile);
+        filewrite.createNewFile();
+        OutputStream out = new FileOutputStream(filewrite);
+
+        /**************Get input Parameter for Junit Run*****************/
+        System.out.println("prepare InputData for Junit");
+        XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(excelPath));
+        XSSFSheet inputSheet = workbook.getSheet("InputSheet");
+        XSSFSheet outputSheet = workbook.getSheet("OutputSheet");
+        long  rowNum = inputSheet.getPhysicalNumberOfRows();
+        List<DataPackage> inputRows = new ArrayList<DataPackage>();
+        String[] inputRowSourceAndFollow = new String[mr.getInputParameterList().size()*2];
+        for(int i = 2; i < rowNum; i++){
+            XSSFRow inputRow = inputSheet.getRow(i);
+            String cellContent = String.valueOf(getStringValueFromCell(inputRow.getCell(0)));
+            if(cellContent != null && !cellContent.equalsIgnoreCase("")){
+                for(int parameterCount = 0 ; parameterCount < mr.getInputParameterList().size()*2; parameterCount++ ){
+                    inputRowSourceAndFollow[parameterCount] = getStringValueFromCell(inputRow.getCell(parameterCount));
+                }
+                inputRows.add(new DataPackage(inputRowSourceAndFollow,i));
+            }
+            inputRowSourceAndFollow = new String[mr.getInputParameterList().size()*2];
+        }
+        /**************Run Junit *****************/
+        System.out.println("prepare Finished");
+        JUnitRunner jUnitRunner = new JUnitRunner();
+        jUnitRunner.setUp((DataPackage[])inputRows.toArray(new DataPackage[inputRows.size()]),mr, programFile);
+        jUnitRunner.run();
+        /**************write back outputData *****************/
+        List<DataPackage> followTcOutput = jUnitRunner.getFollowOutput();
+        List<DataPackage> sourceTcOutput = jUnitRunner.getSourceOutput();
+        for(DataPackage data : sourceTcOutput){
+            XSSFRow outputRow = outputSheet.createRow((int) data.getExcelRowNum());
+            String[] output = data.getData();
+            //todo number of output of java function is only one
+            for(int paramaterCount = 0; paramaterCount < mr.getOutputParameterList().size(); paramaterCount ++){
+                outputRow.createCell(paramaterCount).setCellValue(output[paramaterCount]);
+            }
+        }
+        for(DataPackage data : followTcOutput){
+            XSSFRow outputRow = outputSheet.getRow((int) data.getExcelRowNum());
+            String[] output = data.getData();
+            for(int paramaterCount = 0; paramaterCount < mr.getOutputParameterList().size(); paramaterCount ++){
+                outputRow.createCell(mr.getOutputParameterList().size() + paramaterCount).setCellValue(output[paramaterCount]);
+            }
+        }
+
+        workbook.write(out);
+        out.close();
+        System.out.println("Final Excel Path : " + targetFile);
+        workbook.close();
+        new File(excelPath).delete();
+        return targetFile;
+    }
+
+
+    public void checkOutputRelation(String excelPath) throws Exception {
+        System.out.println("Check OutputRelation...");
+        runVbs("checkOutputRelation", excelPath);
+        System.out.println("Check Finished");
+    }
+
+    public void readCheckResult(String excelPath,int outputNumber)throws Exception{
+        System.out.println("************ Running Result************");
+        XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(excelPath));
+        XSSFSheet outputSheet = workbook.getSheet("OutputSheet");
+        long  rowNum = outputSheet.getPhysicalNumberOfRows();
+        List<RunningResult> report = new ArrayList<RunningResult>();
+        int failCount = 0;
+        for(int i = 2; i < rowNum; i++){
+            XSSFRow outputRow = outputSheet.getRow(i);
+            String cellContent = getStringValueFromCell(outputRow.getCell(outputNumber*2));
+            if(cellContent == null) continue;
+            RunningResult rr = new RunningResult();
+            rr.setRowNum(i);
+            if(cellContent.equalsIgnoreCase("OK")){
+                rr.setIsSuccess(true);
+            }else{
+                rr.setIsSuccess(false);
+                failCount++;
+            }
+            report.add(rr);
+        }
+        System.out.println("total:" + report.size());
+        System.out.println("fail:" + failCount);
+        System.out.println("************ Running Result************");
+    }
+
+
+    public void runVbs(String vbsName,String excelPath) throws Exception {
+
+        //directory for .vbs file
+        File dir = new File(System.getProperty("user.dir") + "/vbs");
+        if (!dir.exists()) {dir.mkdir();}
+
+        //create a certain vbs to execute corresponding micro in excel
+        StringBuffer vbsCommond = new StringBuffer();
+        vbsCommond.append("Set oExcel = createobject('Excel.Application')");
+        String FileName = dir.getAbsolutePath() +"\\" + vbsName + ".vbs";
+        File vbsFile = new File(FileName);
+        if(vbsFile.exists()){
+            vbsFile.delete();
+        }
+        vbsFile.createNewFile();
+        writerLine(FileName,"Set objExcel = CreateObject(\"Excel.Application\")");
+        writerLine(FileName," objExcel.Visible = false ");
+        writerLine(FileName,"Set objWorkbook = objExcel.Workbooks.Open (\""+excelPath+"\")");
+        writerLine(FileName," objExcel.Run \" " + vbsName +"\"");
+        writerLine(FileName," objWorkbook.Save");
+        writerLine(FileName, "objWorkbook.Close ");
+        writerLine(FileName, "objExcel.Quit ");
+        writerLine(FileName, "Set objWorkbook = nothing");
+        writerLine(FileName, "Set objExcel= nothing ");
+        String[] cpCmd  = new String[]{"wscript", FileName};
+        Process process = Runtime.getRuntime().exec(cpCmd);
+        process.waitFor();
+
+        // why is this not working
+//        String cpCmd = "cmd " + dir.getAbsolutePath() + "\\gfi.vbs " + excelPath;
+//        final Process compilePro = Runtime.getRuntime().exec(cpCmd);
 //        compilePro.waitFor();
-//        //run MainFile
-//        String packageName = "";
-//        if(mainFilePackageName != null) packageName = mainFilePackageName + ".";
-//        String runCommond = "java -cp " + dir.getAbsolutePath()  + " "  + packageName  + mainFileName.replace(".java", "");
-//        final Process proc = Runtime.getRuntime().exec(runCommond);
-//        //transport input into process
-//        OutputStream stdin = proc.getOutputStream();
+    }
 //
-//        if(params != null){
-//            for (int i = 0; i < params.length ; i++) {
-//                stdin.write((params[i] + "\n").getBytes());
-//            }
-//        }
-//        stdin.flush();
-//
-//        //get output from process
-//        BufferedReader stdout = new BufferedReader(new InputStreamReader
-//                (proc.getInputStream()));
-//        int count = 0;
-//        double[] outputs = new double[outputNumber];
-//        for (String line;  (line = stdout.readLine()) != null && count < outputs.length; count++){
-////            System.out.println(line);
-//            outputs[count] = Double.valueOf(line);
-//        }
-//        proc.waitFor();
-//        return outputs;
-//    }
-//
-//    public void runVbs(String vbsName,String excelPath) throws Exception {
-//
-//        //directory for .vbs file
-//        File dir = new File(System.getProperty("user.dir") + "/vbs");
-//        if (!dir.exists()) {dir.mkdir();}
-//
-//        //create a certain vbs to execute corresponding micro in excel
-//        StringBuffer vbsCommond = new StringBuffer();
-//        vbsCommond.append("Set oExcel = createobject('Excel.Application')");
-//        String FileName = dir.getAbsolutePath() +"\\" + vbsName + ".vbs";
-//        File vbsFile = new File(FileName);
-//        if(vbsFile.exists()){
-//            vbsFile.delete();
-//        }
-//        vbsFile.createNewFile();
-//        writerLine(FileName,"Set objExcel = CreateObject(\"Excel.Application\")");
-//        writerLine(FileName," objExcel.Visible = false ");
-//        writerLine(FileName,"Set objWorkbook = objExcel.Workbooks.Open (\""+excelPath+"\")");
-//        writerLine(FileName," objExcel.Run \" " + vbsName +"\"");
-//        writerLine(FileName," objWorkbook.Save");
-//        writerLine(FileName, "objWorkbook.Close ");
-//        writerLine(FileName, "objExcel.Quit ");
-//        writerLine(FileName, "Set objWorkbook = nothing");
-//        writerLine(FileName, "Set objExcel= nothing ");
-//        String[] cpCmd  = new String[]{"wscript", FileName};
-//        Process process = Runtime.getRuntime().exec(cpCmd);
-//        process.waitFor();
-//
-//        // why is this not working
-////        String cpCmd = "cmd " + dir.getAbsolutePath() + "\\gfi.vbs " + excelPath;
-////        final Process compilePro = Runtime.getRuntime().exec(cpCmd);
-////        compilePro.waitFor();
-//    }
-//
-//    public  void writerLine(String path, String contents) {
-//        try {
-//            FileWriter fileWriter = new FileWriter(path, true);
-//            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-//            bufferedWriter.write(contents);
-//            bufferedWriter.newLine();
-//            bufferedWriter.flush();
-//            bufferedWriter.close();
-//            fileWriter.close();
-//        } catch (IOException ioe) {
-//        }
-//    }
+    public  void writerLine(String path, String contents) {
+        try {
+            FileWriter fileWriter = new FileWriter(path, true);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(contents);
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
+            bufferedWriter.close();
+            fileWriter.close();
+        } catch (IOException ioe) {
+        }
+    }
 //
 //
     /**
@@ -332,7 +266,7 @@ public class POIExcelUtil {
         timeStamp = timeStamp.replace(":","");
         timeStamp = timeStamp.replace(" ","");
 //        System.out.println(timeStamp);
-        String excelName = ProjectConfig.ExcelOutputPath + mr.getProgramName() + "_" + mr.getMRNumber() + "_" + timeStamp + ".xlsm";
+        String excelName = ProjectConfig.ExcelOutputPath + "\\" +  mr.getProgramName() + "_" + mr.getMRNumber() + "_" + timeStamp + ".xlsm";
         return excelName;
     }
 
@@ -347,23 +281,27 @@ public class POIExcelUtil {
     private int createParameterTitleCell(XSSFSheet sheet, int startCell, XSSFRow row, List<Parameter> params){
         int currentCell = startCell;
         int rowNum = 1;
+        // one parameter own one cell
         for(Parameter param : params){
             String title = param.getName();
-            if(param.getDataType() == Parameter.DataType.ARRAY){
-                String[] length = param.getDataLength().trim().split(" ");
-                if(length.length == 1){
-                    sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, currentCell, currentCell + Integer.valueOf(length[0]) - 1));
-                    row.createCell(currentCell).setCellValue(title);
-                    currentCell += Integer.valueOf(length[0]);
-                }else{
-                    sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, currentCell, currentCell + Integer.valueOf(length[1]) - 1));
-                    row.createCell(currentCell).setCellValue(title);
-                    currentCell += Integer.valueOf(length[1]);
-                }
-            }else{
-                row.createCell(currentCell).setCellValue(title);
-                currentCell ++;
-            }
+            title += "@" + param.getDataType().getName().toUpperCase().charAt(0) ;
+            row.createCell(currentCell).setCellValue(title);
+            currentCell ++;
+//            if(param.getDataType() == Parameter.DataType.ARRAY){
+//                String[] length = param.getDataLength().trim().split(" ");
+//                if(length.length == 1){
+//                    sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, currentCell, currentCell + Integer.valueOf(length[0]) - 1));
+//                    row.createCell(currentCell).setCellValue(title);
+//                    currentCell += Integer.valueOf(length[0]);
+//                }else{
+//                    sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, currentCell, currentCell + Integer.valueOf(length[1]) - 1));
+//                    row.createCell(currentCell).setCellValue(title);
+//                    currentCell += Integer.valueOf(length[1]);
+//                }
+//            }else{
+//                row.createCell(currentCell).setCellValue(title);
+//                currentCell ++;
+//            }
         }
         return currentCell;
     }
@@ -383,5 +321,19 @@ public class POIExcelUtil {
         XSSFRow row = sheet.createRow(0);;
         row.createCell(0).setCellValue("Source");
         row.createCell(SourceEnd).setCellValue("Follow-up");
+    }
+
+    private String getStringValueFromCell(XSSFCell cell) {
+        try{
+            int type = cell.getCellType();
+            if(type == XSSFCell.CELL_TYPE_STRING ){
+                return cell.getStringCellValue();
+            }else{
+                return String.valueOf(cell.getNumericCellValue());
+            }
+        }catch (Exception e ){
+            e.printStackTrace();
+        }
+       return null;
     }
 }

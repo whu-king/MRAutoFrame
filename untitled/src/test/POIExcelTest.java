@@ -1,9 +1,6 @@
 package test;
 
-import app.MRDemo;
-import app.POIExcelUtil;
-import app.Parameter;
-import app.ProjectConfig;
+import app.*;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -30,6 +27,80 @@ public class POIExcelTest {
         String excel = "C:\\Users\\Administrator\\Desktop\\MRAutoFrame\\7-12-test.xlsm";
         POIExcelUtil poiExcelUtil = new POIExcelUtil();
         MRDemo mr = poiExcelUtil.createMRFromExcel(excel);
-        poiExcelUtil.creatExcelFrame(mr,excel);
+        poiExcelUtil.creatExcelFrame(mr, excel);
+    }
+
+    @Test
+    public void testGenerateFollowInput() throws Exception {
+        ProjectConfig.ExcelOutputPath = "C:\\Users\\Administrator\\Desktop\\MRAutoFrame\\";
+        String excel = "C:\\Users\\Administrator\\Desktop\\MRAutoFrame\\7-15-test-2.xlsm";
+        POIExcelUtil poiExcelUtil = new POIExcelUtil();
+        MRDemo mr = poiExcelUtil.createMRFromExcel(excel);
+        String newExcel = poiExcelUtil.creatExcelFrame(mr, excel);
+        poiExcelUtil.generateFollowInputByMR(newExcel);
+    }
+
+
+    @Test
+    public void testRunOnSin() throws Exception{
+        ProjectConfig.ExcelOutputPath = "C:\\Users\\Administrator\\Desktop\\MRAutoFrame\\";
+        String excel = "C:\\Users\\Administrator\\Desktop\\MRAutoFrame\\sin.xlsm";
+        String file = "C:\\Users\\Administrator\\Desktop\\MRAutoFrame";
+        ProgramPackage programPackage = new ProgramPackage();
+        programPackage.setProgramMainFilePackageName("demo");
+        programPackage.setProgramMainFileDir(file);
+        programPackage.setProgramMainFileName("Sin.java");
+        programPackage.setInvokedMethod("execute");
+
+        POIExcelUtil poiExcelUtil = new POIExcelUtil();
+        MRDemo mr = poiExcelUtil.createMRFromExcel(excel);
+        String newExcel = poiExcelUtil.creatExcelFrame(mr, excel);
+        poiExcelUtil.generateFollowInputByMR(newExcel);
+        String finalExcel = poiExcelUtil.generateOutputByProgram(programPackage, newExcel, mr);
+        poiExcelUtil.checkOutputRelation(finalExcel);
+        poiExcelUtil.readCheckResult(finalExcel, mr.getOutputParameterList().size());
+    }
+
+    @Test
+    public void testRunOnMatrix()throws Exception{
+        ProjectConfig.ExcelOutputPath = "C:\\Users\\Administrator\\Desktop\\MRAutoFrame\\";
+        String excel = "C:\\Users\\Administrator\\Desktop\\MRAutoFrame\\matrix.xlsm";
+        String file = "C:\\Users\\Administrator\\Desktop\\MRAutoFrame";
+        ProgramPackage programPackage = new ProgramPackage();
+        programPackage.setProgramMainFilePackageName("test");
+        programPackage.setProgramMainFileDir(file);
+        programPackage.setProgramMainFileName("MatrixDet.java");
+        programPackage.setInvokedMethod("mathDeterminantCalculation");
+//        programPackage.setNeedJars();
+
+        POIExcelUtil poiExcelUtil = new POIExcelUtil();
+        MRDemo mr = poiExcelUtil.createMRFromExcel(excel);
+        String newExcel = poiExcelUtil.creatExcelFrame(mr, excel);
+        poiExcelUtil.generateFollowInputByMR(newExcel);
+        String finalExcel = poiExcelUtil.generateOutputByProgram(programPackage, newExcel, mr);
+        poiExcelUtil.checkOutputRelation(finalExcel);
+        poiExcelUtil.readCheckResult(finalExcel, mr.getOutputParameterList().size());
+    }
+
+    @Test
+    public void testRunOnArff()throws Exception{
+        ProjectConfig.ExcelOutputPath = "C:\\Users\\Administrator\\Desktop\\MRAutoFrame\\";
+        String excel = "C:\\Users\\Administrator\\Desktop\\MRAutoFrame\\7-18-test-2.xlsm";
+        String file = "C:\\Users\\Administrator\\Desktop\\MRAutoFrame";
+        String[] jars = new String[]{"C:\\Users\\Administrator\\Desktop\\MRAutoFrame\\weka.jar"};
+        ProgramPackage programPackage = new ProgramPackage();
+        programPackage.setProgramMainFilePackageName("demo");
+        programPackage.setProgramMainFileDir(file);
+        programPackage.setProgramMainFileName("WekaDemo.java");
+        programPackage.setInvokedMethod("KNN");
+        programPackage.setNeedJars(jars);
+
+        POIExcelUtil poiExcelUtil = new POIExcelUtil();
+        MRDemo mr = poiExcelUtil.createMRFromExcel(excel);
+        String newExcel = poiExcelUtil.creatExcelFrame(mr, excel);
+        poiExcelUtil.generateFollowInputByMR(newExcel);
+        String finalExcel = poiExcelUtil.generateOutputByProgram(programPackage,newExcel,mr);
+        poiExcelUtil.checkOutputRelation(finalExcel);
+        poiExcelUtil.readCheckResult(finalExcel,mr.getOutputParameterList().size());
     }
 }

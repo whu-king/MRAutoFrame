@@ -5,11 +5,11 @@ package app;
  */
 public class DataPackage {
 
-    private double[] data;
+    private String[] data;
     private long excelRowNum;
 
     public DataPackage(){}
-    public DataPackage(double[] data, long rowNum){
+    public DataPackage(String[] data, long rowNum){
         this.data = data;
         this.excelRowNum = rowNum;
     }
@@ -21,11 +21,11 @@ public class DataPackage {
         this.excelRowNum = excelRowNum;
     }
 
-    public double[] getData() {
+    public String[] getData() {
         return data;
     }
 
-    public void setData(double[] data) {
+    public void setData(String[] data) {
         this.data = data;
     }
 

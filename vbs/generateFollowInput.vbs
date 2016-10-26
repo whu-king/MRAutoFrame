@@ -1,6 +1,6 @@
 Set objExcel = CreateObject("Excel.Application")
  objExcel.Visible = false 
-Set objWorkbook = objExcel.Workbooks.Open ("C:\Users\Administrator\Desktop\MRDEMO\test\knn\KNN_1_20160805171956.xlsm")
+Set objWorkbook = objExcel.Workbooks.Open ("C:\Users\Administrator\Desktop\MRDEMO\test\sin\replicate.xlsm")
  objExcel.Run " generateFollowInput"
  objWorkbook.Save
 objWorkbook.Close 

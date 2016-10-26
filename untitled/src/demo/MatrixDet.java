@@ -3,55 +3,55 @@ package demo;
 import java.text.DecimalFormat;
 
 /***
- * N½×ĞĞÁĞÊ½Çó½â
+ * Né˜¶è¡Œåˆ—å¼æ±‚è§£
  * @author imlilu
  *
  */
  public class MatrixDet {
 
     public static void main(String[] args) {
-//		double[][] test = {{2,1,-1},{4,-1,1},{201,102,-99}}; 			½á¹ûÎª-18
-//		double[][] test = {{1,1,-1,3},{-1,-1,2,1},{2,5,2,4},{1,2,3,2}};  ½á¹ûÎª33
-//		double[][] test = {{1,0,-1,2},{-2,1,3,1},{0,1,0,-1},{1,3,4,-2}}; ½á¹ûÎª31
-        //½á¹ûÎª12
+//		double[][] test = {{2,1,-1},{4,-1,1},{201,102,-99}}; 			ç»“æœä¸º-18
+//		double[][] test = {{1,1,-1,3},{-1,-1,2,1},{2,5,2,4},{1,2,3,2}};  ç»“æœä¸º33
+//		double[][] test = {{1,0,-1,2},{-2,1,3,1},{0,1,0,-1},{1,3,4,-2}}; ç»“æœä¸º31
+        //ç»“æœä¸º12
         double[][] test = {{1,-1,2,-3,1},{-3,3,-7,9,-5},{2,0,4,-2,1},{3,-5,7,-14,6},{4,-4,10,-10,2}};
         double result;
         try {
             result = mathDeterminantCalculation( test);
             System.out.println(result);
         } catch (Exception e) {
-            System.out.println("²»ÊÇÕıÈ·µÄĞĞÁĞÊ½£¡£¡");
+            System.out.println("ä¸æ˜¯æ­£ç¡®çš„è¡Œåˆ—å¼ï¼ï¼");
         }
     }
 
     /***
-     * ÇóĞĞÁĞÊ½µÄËã·¨
-     * @param value ĞèÒªËãµÄĞĞÁĞÊ½
-     * @return ¼ÆËãµÄ½á¹û
+     * æ±‚è¡Œåˆ—å¼çš„ç®—æ³•
+     * @param value éœ€è¦ç®—çš„è¡Œåˆ—å¼
+     * @return è®¡ç®—çš„ç»“æœ
      */
     public static double mathDeterminantCalculation(double[][] value) throws Exception{
         if (value.length == 1) {
-            //µ±ĞĞÁĞÊ½Îª1½×µÄÊ±ºò¾ÍÖ±½Ó·µ»Ø±¾Éí
+            //å½“è¡Œåˆ—å¼ä¸º1é˜¶çš„æ—¶å€™å°±ç›´æ¥è¿”å›æœ¬èº«
             return value[0][0];
         }else if (value.length == 2) {
-            //Èç¹ûĞĞÁĞÊ½Îª¶ş½×µÄÊ±ºòÖ±½Ó½øĞĞ¼ÆËã
+            //å¦‚æœè¡Œåˆ—å¼ä¸ºäºŒé˜¶çš„æ—¶å€™ç›´æ¥è¿›è¡Œè®¡ç®—
             return value[0][0]*value[1][1]-value[0][1]*value[1][0];
         }
-        //µ±ĞĞÁĞÊ½µÄ½×Êı´óÓÚ2Ê±
+        //å½“è¡Œåˆ—å¼çš„é˜¶æ•°å¤§äº2æ—¶
         double result = 1;
         for (int i = 0; i < value.length; i++) {
-            //¼ì²éÊı×é¶Ô½ÇÏßÎ»ÖÃµÄÊıÖµÊÇ·ñÊÇ0£¬Èç¹ûÊÇÁãÔò¶Ô¸ÃÊı×é½øĞĞµ÷»»£¬²éÕÒµ½Ò»ĞĞ²»Îª0µÄ½øĞĞµ÷»»
+            //æ£€æŸ¥æ•°ç»„å¯¹è§’çº¿ä½ç½®çš„æ•°å€¼æ˜¯å¦æ˜¯0ï¼Œå¦‚æœæ˜¯é›¶åˆ™å¯¹è¯¥æ•°ç»„è¿›è¡Œè°ƒæ¢ï¼ŒæŸ¥æ‰¾åˆ°ä¸€è¡Œä¸ä¸º0çš„è¿›è¡Œè°ƒæ¢
             if (value[i][i] == 0) {
                 value = changeDeterminantNoZero(value,i,i);
                 result*=-1;
             }
             for (int j = 0; j <i; j++) {
-                //ÈÃ¿ªÊ¼´¦ÀíµÄĞĞµÄÊ×Î»Îª0´¦ÀíÎªÈı½ÇĞÎÊ½
-                //Èç¹ûÒª´¦ÀíµÄÁĞÎª0ÔòºÍ×Ô¼ºµ÷»»Ò»ÏÂÎ»ÖÃ£¬ÕâÑù¾ÍÊ¡È¥ÁË¼ÆËã
+                //è®©å¼€å§‹å¤„ç†çš„è¡Œçš„é¦–ä½ä¸º0å¤„ç†ä¸ºä¸‰è§’å½¢å¼
+                //å¦‚æœè¦å¤„ç†çš„åˆ—ä¸º0åˆ™å’Œè‡ªå·±è°ƒæ¢ä¸€ä¸‹ä½ç½®ï¼Œè¿™æ ·å°±çœå»äº†è®¡ç®—
                 if (value[i][j] == 0) {
                     continue;
                 }
-                //Èç¹ûÒªÊÇÒª´¦ÀíµÄĞĞÊÇ0ÔòºÍÉÏÃæµÄÒ»ĞĞ½øĞĞµ÷»»
+                //å¦‚æœè¦æ˜¯è¦å¤„ç†çš„è¡Œæ˜¯0åˆ™å’Œä¸Šé¢çš„ä¸€è¡Œè¿›è¡Œè°ƒæ¢
                 if (value[j][j]==0) {
                     double[] temp = value[i];
                     value[i] = value[i-1];
@@ -68,13 +68,13 @@ import java.text.DecimalFormat;
     }
 
     /**
-     * ¼ÆËãĞĞÁĞÊ½µÄ½á¹û
+     * è®¡ç®—è¡Œåˆ—å¼çš„ç»“æœ
      * @param value
      * @return
      */
     public static double mathValue(double[][] value,double result) throws Exception{
         for (int i = 0; i < value.length; i++) {
-            //Èç¹û¶Ô½ÇÏßÉÏÓĞÒ»¸öÖµÎª0ÔòÈ«²¿Îª0£¬Ö±½Ó·µ»Ø½á¹û
+            //å¦‚æœå¯¹è§’çº¿ä¸Šæœ‰ä¸€ä¸ªå€¼ä¸º0åˆ™å…¨éƒ¨ä¸º0ï¼Œç›´æ¥è¿”å›ç»“æœ
             if (value[i][i]==0) {
                 return 0;
             }
@@ -84,11 +84,11 @@ import java.text.DecimalFormat;
     }
 
     /***
-     * ½«iĞĞÖ®Ç°µÄÃ¿Ò»ĞĞ³ËÒÔÒ»¸öÏµÊı£¬Ê¹µÃ´ÓiĞĞµÄµÚiÁĞÖ®Ç°µÄÊı×ÖÖÃ»»Îª0
-     * @param currentRow µ±Ç°Òª´¦ÀíµÄĞĞ
-     * @param frontRow iĞĞÖ®Ç°µÄ±éÀúµÄĞĞ
-     * @param ratio Òª³ËÒÔµÄÏµÊı
-     * @return ½«iĞĞiÁĞÖ®Ç°Êı×ÖÖÃ»»Îª0ºóµÄĞÂµÄĞĞ
+     * å°†iè¡Œä¹‹å‰çš„æ¯ä¸€è¡Œä¹˜ä»¥ä¸€ä¸ªç³»æ•°ï¼Œä½¿å¾—ä»iè¡Œçš„ç¬¬iåˆ—ä¹‹å‰çš„æ•°å­—ç½®æ¢ä¸º0
+     * @param currentRow å½“å‰è¦å¤„ç†çš„è¡Œ
+     * @param frontRow iè¡Œä¹‹å‰çš„éå†çš„è¡Œ
+     * @param ratio è¦ä¹˜ä»¥çš„ç³»æ•°
+     * @return å°†iè¡Œiåˆ—ä¹‹å‰æ•°å­—ç½®æ¢ä¸º0åçš„æ–°çš„è¡Œ
      */
     public static double[] addValue(double[] currentRow,double[] frontRow, double ratio)throws Exception{
         for (int i = 0; i < currentRow.length; i++) {
@@ -98,14 +98,14 @@ import java.text.DecimalFormat;
     }
 
     /**
-     * Ö¸¶¨ÁĞµÄÎ»ÖÃÊÇ·ñÎª0£¬²éÕÒµÚÒ»¸ö²»Îª0µÄÎ»ÖÃµÄĞĞ½øĞĞÎ»ÖÃµ÷»»£¬Èç¹ûÃ»ÓĞÔò·µ»ØÔ­À´µÄÖµ
-     * @param determinant ĞèÒª´¦ÀíµÄĞĞÁĞÊ½
-     * @param line Òªµ÷»»µÄĞĞ
-     * @param row ÒªÅĞ¶ÏµÄÁĞ
+     * æŒ‡å®šåˆ—çš„ä½ç½®æ˜¯å¦ä¸º0ï¼ŒæŸ¥æ‰¾ç¬¬ä¸€ä¸ªä¸ä¸º0çš„ä½ç½®çš„è¡Œè¿›è¡Œä½ç½®è°ƒæ¢ï¼Œå¦‚æœæ²¡æœ‰åˆ™è¿”å›åŸæ¥çš„å€¼
+     * @param determinant éœ€è¦å¤„ç†çš„è¡Œåˆ—å¼
+     * @param line è¦è°ƒæ¢çš„è¡Œ
+     * @param row è¦åˆ¤æ–­çš„åˆ—
      */
     public static double[][] changeDeterminantNoZero(double[][] determinant,int line,int row)throws Exception{
         for (int j = line; j < determinant.length; j++) {
-            //½øĞĞĞĞµ÷»»
+            //è¿›è¡Œè¡Œè°ƒæ¢
             if (determinant[j][row] != 0) {
                 double[] temp = determinant[line];
                 determinant[line] = determinant[j];

@@ -1,6 +1,6 @@
 Set objExcel = CreateObject("Excel.Application")
  objExcel.Visible = false 
-Set objWorkbook = objExcel.Workbooks.Open ("C:\Users\Administrator\Desktop\MRDEMO\test\knn\KNN_1_20160805172000.xlsm")
+Set objWorkbook = objExcel.Workbooks.Open ("C:\Users\Administrator\Desktop\MRDEMO\test\sin\sin_2016_10_26_14_40_44.xlsm")
  objExcel.Run " checkOutputRelation"
  objWorkbook.Save
 objWorkbook.Close 

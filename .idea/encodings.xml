@@ -2,15 +2,29 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$USER_HOME$/Desktop/MRAutoFrame/WekaDemo.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/untitled/src/app/ClassRunner.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/untitled/src/app/JUnitRunner.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/untitled/src/app/Parameter.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/untitled/src/app/Main.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/untitled/src/app/ProjectConfig.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/untitled/src/app/UserInteraction.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/untitled/src/app/excel/ExcelOperatorWithLogic.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/untitled/src/app/excel/POIExcelUtil.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/untitled/src/app/fileUtil/FileSummarization.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/untitled/src/app/model/DataPackage.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/untitled/src/app/model/MRModel.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/untitled/src/app/model/Parameter.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/untitled/src/app/model/ProgramPackage.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/untitled/src/app/model/RunningResult.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/untitled/src/app/model/VBAModule.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/untitled/src/app/repository/VBAModuleRepoLocalImpl.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/untitled/src/app/run/ClassRunner.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/untitled/src/app/run/JUnitRunner.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/untitled/src/app/run/TestCaseTemplate.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/untitled/src/demo/ClassLoaderTest.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/untitled/src/demo/MatrixDet.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/untitled/src/demo/ObjectTest.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/untitled/src/demo/POITest.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/untitled/src/demo/Sub.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/untitled/src/demo/WekaDemo.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/untitled/src/test/ClassRunnerTest.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/untitled/src/test/POIExcelTest.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/untitled/src/test/ParameterTest.java" charset="UTF-8" />
   </component>
 </project>

@@ -1,8 +1,7 @@
 package test;
 
-import app.Parameter;
+import app.model.Parameter;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;

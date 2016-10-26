@@ -3,14 +3,15 @@
  * Author:WangChen
  */
 
-package app;
+package app.run;
+
+import app.ProjectConfig;
+import app.model.ProgramPackage;
 
 import java.io.*;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.List;
 
 /**
  * Created by Administrator on 2016/7/15.
@@ -18,6 +19,7 @@ import java.util.List;
 public class ClassRunner {
 
     public static String RunJavaProgramByReflect(ProgramPackage programPackage,String params[])throws Exception{
+        //todo return type is solid as String,using <T> to extend
         addJar(programPackage.getNeedJars());
         File dir = new File(ProjectConfig.CompileClassPath);
         if(!dir.exists()) dir.mkdir();
@@ -28,7 +30,13 @@ public class ClassRunner {
         // Create a new class loader with the directory
         ClassLoader cl = new URLClassLoader(urls);
 //        cl(new File(path).toURI().toURL());
-        String fullClassName = programPackage.getProgramMainFilePackageName() + "." + programPackage.getProgramMainFileName().replaceAll("\\.java","");
+        String fullClassName = "";
+        if(programPackage.getProgramMainFilePackageName().equalsIgnoreCase("") ||
+                programPackage.getProgramMainFilePackageName() == null){
+            fullClassName = programPackage.getProgramMainFileName().replaceAll("\\.java","");
+        }else{
+            fullClassName = programPackage.getProgramMainFilePackageName() + "." + programPackage.getProgramMainFileName().replaceAll("\\.java","");
+        }
         Class cls = cl.loadClass(fullClassName);
         Method[] method = cls.getDeclaredMethods();
         for (Method me : method) {

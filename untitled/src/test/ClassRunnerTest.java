@@ -5,15 +5,10 @@
 
 package test;
 
-import app.ClassRunner;
-import app.ProgramPackage;
+import app.run.ClassRunner;
+import app.model.ProgramPackage;
 import app.ProjectConfig;
 import org.junit.Test;
-
-import java.io.File;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
 
 /**
  * Created by Administrator on 2016/7/16.

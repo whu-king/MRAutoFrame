@@ -3,7 +3,7 @@
  * Author:WangChen
  */
 
-package app;
+package app.model;
 
 /**
  * Created by Administrator on 2016/7/16.

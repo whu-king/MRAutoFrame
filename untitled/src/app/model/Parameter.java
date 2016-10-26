@@ -1,6 +1,7 @@
-package app;
+package app.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,7 +11,7 @@ import java.util.regex.Pattern;
  */
 public class Parameter {
 
-    private app.Parameter.DataType dataType;
+    private Parameter.DataType dataType;
     private String dataLength = "default";
     private String name = "";
 
@@ -71,11 +72,11 @@ public class Parameter {
         this.name = name;
     }
 
-    public app.Parameter.DataType getDataType() {
+    public Parameter.DataType getDataType() {
         return dataType;
     }
 
-    public void setDataType(app.Parameter.DataType dataType) {
+    public void setDataType(Parameter.DataType dataType) {
         this.dataType = dataType;
     }
 
@@ -88,11 +89,10 @@ public class Parameter {
     }
 
     public static List<Parameter> valueOf(String str){
-        //Format: {ARRAY[2][2] d,LONG l}
+
         List<Parameter> params = new ArrayList<Parameter>();
-        String[] paramStrs = str.trim().replaceAll("\\{","").replaceAll("\\}","").split(",");
-        //Format : [number]
-        Pattern lengthPattern = Pattern.compile("\\[\\d+\\]",Pattern.CASE_INSENSITIVE);
+        String[] paramStrs = str.trim().replaceAll("\\{","").replaceAll("\\}","").split(",");//Format: {ARRAY[2][2] d,LONG l}
+        Pattern lengthPattern = Pattern.compile("\\[\\d+\\]",Pattern.CASE_INSENSITIVE);//Format : [number]
         for(String par : paramStrs){
             String []mids = par.trim().split(" ");
             Parameter parm = new Parameter();
@@ -110,5 +110,27 @@ public class Parameter {
             params.add(parm);
         }
         return params;
+    }
+
+    public static String getParameterString(List<Parameter> params){
+        String result = "";
+        for(Parameter param : params){
+            result += param.getDataType() + " " + param.getName() + ",";
+        }
+        result = result.substring(0,result.length()-1);
+        return result;
+    }
+
+    public static void main(String []args){
+        Parameter p = new Parameter();
+        p.setDataType(DataType.DOUBLE);
+        p.setName("param");
+        Parameter p2 = new Parameter();
+        p2.setDataType(DataType.DOUBLE);
+        p2.setName("param2");
+        List<Parameter> params = new ArrayList<Parameter>();
+        params.add(p);
+        params.add(p2);
+        System.out.println(getParameterString(params));
     }
 }
